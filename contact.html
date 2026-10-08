@@ -6,14 +6,14 @@
 <meta content="width=device-width, initial-scale=1" name="viewport"/>
 <meta content="#000000" name="theme-color"/>
 <meta content="Discuss workflow modernization, business foundations, a software project or a knowledge AI idea with DigiMarvel. Tell us what could work better." name="description"/>
-<meta content="Contact | DigiMarvel" property="og:title"/>
+<meta content="Talk to us | DigiMarvel" property="og:title"/>
 <meta content="Discuss workflow modernization, business foundations, a software project or a knowledge AI idea with DigiMarvel. Tell us what could work better." property="og:description"/>
 <meta content="website" property="og:type"/>
 <meta content="assets/og-card.svg" property="og:image"/>
 <link href="assets/favicon.svg" rel="icon" type="image/svg+xml"/>
 <link href="site.webmanifest" rel="manifest"/>
-<link as="font" crossorigin="" href="assets/inter-400.ttf" rel="preload" type="font/ttf"/><link href="assets/tokens.css?v=20261008-2" rel="stylesheet"/><link href="assets/base.css?v=20261008-2" rel="stylesheet"/><link href="assets/site.css?v=20261008-4" rel="stylesheet"/>
-<title>Contact | DigiMarvel</title>
+<link as="font" crossorigin="" href="assets/inter-400.ttf" rel="preload" type="font/ttf"/><link href="assets/tokens.css?v=20261008-2" rel="stylesheet"/><link href="assets/base.css?v=20261008-2" rel="stylesheet"/><link href="assets/site.css?v=20261008-6" rel="stylesheet"/>
+<title>Talk to us | DigiMarvel</title>
 <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -41,44 +41,40 @@
 <nav aria-label="Primary navigation" class="main-nav" data-menu="" id="primary-menu">
 <a href="odoo.html">Workflow modernization</a>
 <a href="about.html">Company</a>
-<a aria-current="page" class="nav-action" href="contact.html">Discuss a project <span>→</span></a>
+<a aria-current="page" class="nav-action" href="contact.html">Talk to us <span>→</span></a>
 </nav>
 </div>
 </header>
 <main id="main-content">
-<section class="page-hero contact-hero">
-<div class="container narrow reveal">
+<section class="talk-page">
+<div class="container talk-grid">
+<div class="talk-main">
+<div class="talk-intro reveal">
 <div class="kicker"><span></span> CONTACT</div>
-<h1>Tell us what you are<br/>trying to improve.</h1>
-<p>You don’t need a finished brief. Tell us what is difficult today, who is affected and what you would like to make easier.</p>
+<h1>Talk to us</h1>
+<p>Whether you are modernizing how your team works, planning a software project or exploring an AI idea, tell us what is taking more effort than it should. You don’t need a finished brief.</p>
 </div>
-<svg aria-hidden="true" class="art-fallback" viewbox="0 0 600 600"><g fill="none" stroke="currentColor"><ellipse cx="310" cy="290" rx="210" ry="135" transform="rotate(-36 310 290)"></ellipse><ellipse cx="310" cy="290" rx="210" ry="90" transform="rotate(-36 310 290)"></ellipse><ellipse cx="310" cy="290" rx="210" ry="165" transform="rotate(-36 310 290)"></ellipse></g></svg></section>
-<section class="section contact-section">
-<div class="container contact-grid">
-<div class="contact-info reveal">
-<div class="section-label">START A CONVERSATION</div>
-<h2>Start with the problem<br/>you know best.</h2>
-<p>Share one process or task that could work better. The first conversation is about understanding it, deciding whether there is a fit and identifying what needs to be clarified before a proposal.</p>
-<div class="contact-method">
-<span>EMAIL</span><a href="mailto:support@digimarvel.ai">support@digimarvel.ai</a>
-</div>
-<div class="contact-method">
-<span>LOCATION</span><p>Hyderabad, India</p>
-</div>
-</div>
-<form action="mailto:support@digimarvel.ai" class="contact-form reveal delay-1" enctype="text/plain" method="post">
-<div class="form-note">Submitting opens your email app with your message ready to send. Prefer to write directly? Email <a href="mailto:support@digimarvel.ai">support@digimarvel.ai</a>.</div>
-<label>Your name<input autocomplete="name" name="Name" required="" type="text"/></label>
-<label>Work email<input autocomplete="email" name="Email" required="" type="email"/></label>
-<label>Organization<input autocomplete="organization" name="Organization" type="text"/></label>
-<label>What could work better?<textarea name="Requirement" placeholder="For example, we enter every customer order in three places and still have to chase its status." required="" rows="6"></textarea></label>
-<button class="button button-primary" type="submit">Open in email app <span>↗</span></button>
+<form action="api/contact.php" class="talk-form reveal delay-1" data-talk-form="" id="talk-form" method="post">
+<div class="talk-row"><label for="talk-name">Name <abbr title="required">*</abbr></label><input autocomplete="name" id="talk-name" maxlength="100" name="name" required="" type="text"/></div>
+<div class="talk-row"><label for="talk-org">Organization <abbr title="required">*</abbr></label><input autocomplete="organization" id="talk-org" maxlength="150" name="organization" required="" type="text"/></div>
+<div class="talk-row"><label for="talk-email">Work email <abbr title="required">*</abbr></label><input autocomplete="email" id="talk-email" maxlength="254" name="email" required="" type="email"/></div>
+<div class="talk-row"><label for="talk-topic">I’m interested in <abbr title="required">*</abbr></label><select id="talk-topic" name="topic" required=""><option>Workflow modernization (Odoo)</option><option>Business foundations</option><option>A software project</option><option>A knowledge AI idea</option><option>Not sure yet</option></select></div>
+<div class="talk-row"><label for="talk-subject">Subject <abbr title="required">*</abbr></label><input id="talk-subject" maxlength="120" name="subject" placeholder="Orders live in three different places" required="" type="text"/></div>
+<div class="talk-row"><label for="talk-message">Message <abbr title="required">*</abbr></label><textarea id="talk-message" maxlength="5000" name="message" placeholder="What is difficult today, who it affects and what you would like to make easier." required="" rows="6"></textarea></div>
+<div aria-hidden="true" class="talk-trap"><label for="talk-website">Leave this empty</label><input autocomplete="off" id="talk-website" name="website" tabindex="-1" type="text"/></div>
+<div class="talk-row talk-submit"><span aria-hidden="true"></span><div><button class="button button-primary" type="submit">Send message <span aria-hidden="true">→</span></button><p aria-live="polite" class="talk-status" data-talk-status="" role="status"></p><p class="talk-status is-success" id="sent">Thank you. Your message is on its way and we’ll reply by email.</p><p class="talk-status is-error" id="send-failed">We couldn’t send your message. Please email <a href="mailto:support@digimarvel.ai">support@digimarvel.ai</a> instead.</p><p class="form-note">Your message goes to support@digimarvel.ai and is only used to reply to you. See our <a href="privacy.html">Privacy Policy</a>.</p></div></div>
 </form>
+</div>
+<aside aria-label="Contact details" class="talk-aside reveal delay-2">
+<div class="talk-detail"><h2>General enquiries</h2><a href="mailto:support@digimarvel.ai">support@digimarvel.ai</a></div>
+<div class="talk-detail"><h2>First conversation</h2><p>We talk through the process, decide whether there is a fit and identify what needs clarifying before a proposal.</p></div>
+<div class="talk-detail"><h2>Office</h2><p>Digimarvel Private Limited<br/>Hyderabad, India</p></div>
+</aside>
 </div>
 </section>
 <section class="section section-soft">
 <div class="container faq">
-<div class="section-heading reveal"><div><div class="section-label">FIRST CONVERSATION</div><h2>What helps us understand.</h2></div></div>
+<div class="section-heading reveal"><div><div class="section-label">WHAT TO INCLUDE</div><h2>What helps us understand.</h2></div></div>
 <div class="faq-grid">
 <article class="reveal"><h3>What is the current problem?</h3><p>Describe the process, service gap, information challenge or security concern in plain language.</p></article>
 <article class="reveal delay-1"><h3>Who are the users?</h3><p>Tell us who does the work, who needs the information and who would help test a new approach.</p></article>
@@ -115,7 +111,7 @@
 <div><a href="privacy.html">Privacy</a><a href="terms.html">Terms</a></div>
 </div>
 </footer>
-<script src="assets/site.js?v=20261008-2"></script>
+<script src="assets/site.js?v=20261008-4"></script>
 </body>
 </html>
 

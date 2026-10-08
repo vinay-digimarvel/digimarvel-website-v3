@@ -1,6 +1,6 @@
 # DigiMarvel website (V3)
 
-The marketing site for [digimarvel.ai](https://www.digimarvel.ai). It has six static pages built with plain HTML, CSS and JavaScript. There is no build step, framework, CDN, analytics or backend. Every page loads only local files, so you can open the folder with any static file server and it runs.
+The marketing site for [digimarvel.ai](https://www.digimarvel.ai). It has six static pages built with plain HTML, CSS and JavaScript. There is no build step, framework, CDN or analytics. Every page loads only local files, so you can open the folder with any static file server and it runs. The one piece of server code is `api/contact.php`, a PHP script that sends Talk to us enquiries through [Resend](https://resend.com).
 
 > **Status:** Not yet deployed.
 
@@ -9,6 +9,7 @@ The marketing site for [digimarvel.ai](https://www.digimarvel.ai). It has six st
 - **Positioning.** DigiMarvel is presented as a Business Transformation & Intelligent Systems Studio that helps growing businesses redesign how they operate and implement connected systems that make those operations simpler, more efficient and scalable. Odoo remains a core implementation platform.
 - **Homepage story.** A scroll-driven particle story runs in three steps: **"Scattered data tells half the story."** → **"One place. Every answer."** (Odoo) → **"Clean data in. Real intelligence out."** (AI). It is built with `data-story.css` and `data-story.js`.
 - **How we work.** A four-step process (Understand, Establish, Stabilize, Evolve) on a track that draws in on scroll. Each step ends with an outcome.
+- **Talk to us.** The contact page is now one focused form with the contact details alongside it. Messages are sent through Resend by `api/contact.php` (see `docs/deployment.md` for setup). Every nav and call-to-action button that said "Discuss a project" now says "Talk to us".
 - **Odoo page.** It has its own link in the main nav and footer. The separate Workflow Modernization block on the homepage was removed.
 
 ## Quick start
@@ -31,7 +32,7 @@ python3 .claude/serve.py 8083
 | --- | --- | --- |
 | `index.html` | Home | Text hero over a star field, three-step particle story (scattered data → Odoo → AI), the How we work process and the closing call to action |
 | `about.html` | Company | Mission and operating principles |
-| `contact.html` | Contact | `mailto:` form. No data is sent to a server |
+| `contact.html` | Talk to us | Labelled form (name, organization, email, interest, subject, message) beside the contact details. It posts to `api/contact.php`, which sends the message through Resend. Nothing is stored on the server |
 | `odoo.html` | Workflow modernization (Odoo) | Text hero, workflow explorer, FAQ, downloadable project brief and a scroll-driven particle layer. The main nav and footer link to it as "Workflow modernization". Home links to it from the hero and the particle story |
 | `privacy.html` | Privacy Policy | Placeholder text that needs legal review |
 | `terms.html` | Terms of Use | Placeholder text that needs legal review |
@@ -43,6 +44,8 @@ python3 .claude/serve.py 8083
 ```
 .
 ├── *.html                 Six pages. Each one contains its own copy of the header and footer
+├── api/contact.php        Talk to us form handler (PHP → Resend). Reads its key from digimarvel-config.php outside the web root
+├── digimarvel-config.example.php  Template for that config file (do not upload)
 ├── assets/
 │   ├── tokens.css         Design tokens (colors, type, spacing). Copied unchanged from the oo design system
 │   ├── base.css           Fonts, typography, buttons, forms, header, footer
@@ -71,4 +74,4 @@ When you change a file in `assets/`, give its `?v=` query a new value on every p
 
 ## Contact address
 
-All enquiries go to **support@digimarvel.ai**. The address is hard-coded in every page footer, the Contact form, the JSON-LD block on five of the pages (every page except Odoo), and the brief text in `assets/odoo.js`. If it changes, search the whole project for it and replace every occurrence.
+All enquiries go to **support@digimarvel.ai**. The address is hard-coded in every page footer, the Talk to us page, `digimarvel-config.php` (the Resend `to` address), the JSON-LD block on five of the pages (every page except Odoo), and the brief text in `assets/odoo.js`. If it changes, search the whole project for it and replace every occurrence.
