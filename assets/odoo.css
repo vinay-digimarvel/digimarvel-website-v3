@@ -1,0 +1,171 @@
+/* Hallmark · macrostructure: Split Studio · tone: warm, approachable · anchor hue: violet · port: oo */
+.odoo-page button:disabled{cursor:wait;opacity:.6}
+.odoo-page button:active{transform:translateY(1px)}
+.odoo-page .wrap{max-width:calc(var(--page-width) + var(--page-gutter)*2);padding-inline:var(--page-gutter);margin-inline:auto}
+.odoo-page main{position:relative;z-index:1}
+.odoo-page .header-link{display:flex;gap:var(--space-xl);align-items:center;white-space:nowrap;font-size:var(--text-label);border-bottom:1px solid var(--color-quiet);padding-block:.4rem}
+.odoo-page .header-link:hover{color:var(--color-amber)}
+.odoo-page .eyebrow{font-size:var(--text-label);font-weight:400;letter-spacing:.01em;margin-bottom:var(--space-xl);color:var(--color-muted)}
+.odoo-page .hero-copy{position:relative;z-index:2}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+.odoo-page .muted-heading{color:var(--color-quiet)}
+
+
+
+.odoo-page .text-link{display:inline-flex;align-items:center;gap:var(--space-lg);font-size:var(--text-label);margin-top:var(--space-sm);white-space:nowrap}
+
+
+
+
+
+
+
+
+
+
+
+.odoo-page #workflow-description{max-width:32rem;color:var(--color-muted);font-weight:200}
+.odoo-page .flow-diagram{display:flex;align-items:center;justify-content:space-between;min-height:5rem;margin:0 0 var(--space-sm)}
+.odoo-page .flow-step{font-size:var(--text-small);display:flex;flex-direction:column;align-items:center;gap:var(--space-md);min-width:0;white-space:nowrap}
+.odoo-page .flow-dot{width:1rem;height:1rem;border:1px solid var(--color-lilac);border-radius:50%;outline:6px solid var(--color-paper);position:relative}
+.odoo-page .flow-step:last-child .flow-dot{background:var(--color-accent);border-color:var(--color-accent)}
+.odoo-page .flow-line{height:1px;flex:1;background:var(--color-rule);margin-top:-2.35rem}
+
+.odoo-page .check-list{padding:0;margin:var(--space-lg) 0 0;list-style:none;font-size:1rem;color:var(--color-muted)}
+.odoo-page .check-list li{display:flex;gap:var(--space-sm);margin-block:var(--space-sm);line-height:1.5}
+.odoo-page .check-list li:before{content:'↗';color:var(--color-lilac)}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+.odoo-page dialog{background:var(--color-paper);color:var(--color-ink);border:1px solid var(--color-rule);border-radius:var(--radius-dialog);width:min(35rem,calc(100% - 2rem));padding:var(--space-xl);max-height:90dvh;overflow-y:auto}
+.odoo-page dialog::backdrop{background:var(--color-backdrop);backdrop-filter:blur(8px)}
+.odoo-page dialog .eyebrow{margin:var(--space-sm) 2rem var(--space-lg) 0}
+.odoo-page dialog h2{font-size:2.5rem}
+.odoo-page #brief-intro{font-size:1rem;color:var(--color-muted);margin-top:var(--space-md)}
+.odoo-page .dialog-close{position:absolute;top:var(--space-md);right:var(--space-md);color:var(--color-muted);border:0;background:none;font-size:1.8rem;width:2.75rem;height:2.75rem}
+.odoo-page .dialog-close:hover{color:var(--color-ink)}
+.odoo-page dialog form{margin-top:var(--space-lg)}
+.odoo-page dialog form label{display:block;font-size:var(--text-label);margin:var(--space-lg) 0 var(--space-sm)}
+.odoo-page input::placeholder,.odoo-page textarea::placeholder{color:var(--color-quiet)}
+.odoo-page .form-note{font-size:var(--text-small);line-height:1.5;color:var(--color-quiet);margin-block:var(--space-md) var(--space-lg)}
+.odoo-page .form-status{font-size:var(--text-label);color:var(--color-success);margin-top:var(--space-sm);min-height:1.5rem}
+.odoo-page .form-status.is-error{color:var(--color-error)}
+body.odoo-page.has-dialog{overflow-y:hidden}
+@media(prefers-reduced-motion:reduce){.odoo-page *:before,.odoo-page *:after{animation:none!important;transition:none!important}}
+.odoo-page .closing-block{padding-top:var(--space-3xl)}
+.odoo-page .odoo-signoff{font-size:var(--text-small)}
+
+
+@media(min-width:64rem){.odoo-page .closing-block .footer-message{max-width:52rem}}
+
+
+/* Below the hero: two sections on one shared column grid, each opened by a hairline rule. */
+.odoo-page .section-head{display:grid;gap:var(--space-lg);padding-top:var(--space-xl);border-top:1px solid var(--color-rule)}
+.odoo-page .section-head .eyebrow{margin-bottom:var(--space-lg)}
+.odoo-page .section-lead{color:var(--color-muted);font-weight:200;max-width:30rem}
+.odoo-page .workflows{padding-block:var(--space-3xl)}
+.odoo-page .workflow-explorer{display:grid;gap:var(--space-xl);margin-top:var(--space-2xl);align-items:start}
+.odoo-page .workflow-tabs{display:flex;flex-direction:column;border-top:1px solid var(--color-rule)}
+.odoo-page .workflow-tabs button{display:flex;align-items:center;gap:var(--space-md);text-align:left;border:0;border-bottom:1px solid var(--color-rule);background:none;color:var(--color-quiet);padding:var(--space-lg) 0;font-weight:400;font-size:clamp(1.125rem,2vw,1.6rem);letter-spacing:-.025em;white-space:nowrap;transition:color var(--dur-short) var(--ease-out)}
+.odoo-page .tab-index{flex:none;width:2rem;font-size:.6875rem;letter-spacing:.04em;font-variant-numeric:tabular-nums;color:var(--color-quiet)}
+.odoo-page .tab-label{flex:1}
+.odoo-page .workflow-tabs button[aria-selected=true],.odoo-page .workflow-tabs button:hover{color:var(--color-ink)}
+.odoo-page .workflow-tabs button[aria-selected=true] .tab-index,.odoo-page .workflow-tabs button[aria-selected=true]>span:last-child{color:var(--color-amber)}
+.odoo-page .workflow-tabs button>span:last-child{opacity:0}
+.odoo-page .workflow-tabs button[aria-selected=true]>span:last-child,.odoo-page .workflow-tabs button:hover>span:last-child{opacity:1}
+.odoo-page .workflow-panel{min-width:0;border:1px solid var(--color-rule);border-radius:var(--radius-dialog);padding:var(--space-xl) var(--space-lg)}
+.odoo-page .workflow-panel h3{margin-bottom:var(--space-md)}
+.odoo-page #workflow-description{max-width:32rem;color:var(--color-muted);font-weight:200}
+.odoo-page .diagram-caption{font-size:var(--text-small);color:var(--color-quiet);margin-bottom:var(--space-xl)}
+.odoo-page .panel-foot{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:var(--space-md);margin-top:var(--space-xl);padding-top:var(--space-lg);border-top:1px solid var(--color-rule)}
+.odoo-page .workflow-apps{display:flex;flex-wrap:wrap;gap:var(--space-xs) var(--space-lg);font-size:var(--text-small);color:var(--color-quiet)}
+.odoo-page .workflow-apps strong{font-weight:400;color:var(--color-ink)}
+.odoo-page button.text-link{margin:0;padding:0;border:0;background:none;color:var(--color-ink);font-weight:400;min-height:2.75rem;cursor:pointer}
+@media(min-width:48rem){
+.odoo-page .workflow-explorer{grid-template-columns:minmax(0,.8fr) minmax(0,1.1fr);gap:var(--space-3xl)}
+.odoo-page .workflow-panel{padding:var(--space-2xl)}
+}
+@media(min-width:64rem){
+.odoo-page .section-head{grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:var(--space-2xl);align-items:end}
+.odoo-page .section-lead{justify-self:end;max-width:26rem}
+.odoo-page .workflows{padding-top:var(--space-4xl)}
+.odoo-page .workflow-explorer{gap:var(--space-4xl)}
+.odoo-page .workflow-explorer{margin-top:var(--space-3xl)}
+.odoo-page .flow-step{font-size:var(--text-label)}
+}
+
+/* Hero: heading on the left, supporting copy on the right, centred against each other. */
+.odoo-page .hero{position:relative;padding-block:var(--space-2xl) var(--space-3xl)}
+.odoo-page .hero h1{font-size:clamp(2.6rem,7vw,5.4rem);line-height:1.04;letter-spacing:-.06em}
+.odoo-page .hero-line{display:block}
+.odoo-page .hero-body{max-width:34rem;margin-top:var(--space-xl)}
+.odoo-page .hero-description,.odoo-page .hero-detail{font-size:clamp(1.125rem,1.5vw,1.25rem);line-height:1.6;font-weight:200;color:var(--color-muted)}
+.odoo-page .hero-description{color:var(--color-ink)}
+.odoo-page .hero-detail{margin-top:var(--space-lg)}
+@media(min-width:48rem){.odoo-page .hero{padding-block:var(--space-3xl) var(--space-4xl)}}
+@media(min-width:64rem){
+.odoo-page .hero{padding-top:var(--space-4xl)}
+.odoo-page .hero-copy{display:grid;grid-template-columns:minmax(0,1.6fr) minmax(0,1fr);gap:var(--space-3xl);align-items:center}
+.odoo-page .hero h1{font-size:clamp(3rem,4.8vw,4.4rem)}
+.odoo-page .hero-line{white-space:nowrap}
+.odoo-page .hero-body{margin-top:0}
+}
+
+/* FAQ: the six questions in three themed groups, answers always visible. */
+.odoo-page .faq{padding-block:var(--space-2xl) var(--space-4xl)}
+.odoo-page .section-lead .text-link{margin-top:var(--space-md)}
+.odoo-page .faq-groups{display:grid;gap:var(--space-2xl);margin-top:var(--space-2xl)}
+.odoo-page .faq-group{border-top:1px solid var(--color-rule);padding-top:var(--space-lg)}
+.odoo-page .faq-group-label{display:flex;align-items:baseline;font-size:var(--text-label);color:var(--color-muted);margin-bottom:var(--space-lg)}
+.odoo-page .faq-group-label .tab-index{color:var(--color-amber)}
+.odoo-page .faq-item+.faq-item{margin-top:var(--space-xl)}
+.odoo-page .faq-item h3{font-size:1.2rem;line-height:1.4;letter-spacing:-.02em;margin-bottom:var(--space-sm)}
+.odoo-page .faq-item p{font-size:1rem;line-height:1.65;font-weight:200;color:var(--color-muted);max-width:34rem}
+@media(min-width:48rem){
+.odoo-page .faq-group{display:grid;grid-template-columns:minmax(0,.8fr) minmax(0,1.1fr);gap:var(--space-xl) var(--space-3xl)}
+.odoo-page .faq-group-label{margin:0;grid-row:1/span 2}
+.odoo-page .faq-item{grid-column:2}
+.odoo-page .faq-item+.faq-item{margin-top:0}
+}
+@media(min-width:64rem){
+.odoo-page .faq-groups{grid-template-columns:repeat(3,minmax(0,1fr));gap:var(--space-2xl);margin-top:var(--space-3xl)}
+.odoo-page .faq-group{display:block}
+.odoo-page .faq-group-label{margin-bottom:var(--space-xl)}
+.odoo-page .faq-item+.faq-item{margin-top:var(--space-xl)}
+}

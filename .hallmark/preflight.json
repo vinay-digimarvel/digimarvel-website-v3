@@ -1,0 +1,10 @@
+{
+  "date": "2026-10-07",
+  "system": "../oo/DESIGN.md",
+  "framework": "static HTML/CSS/JS",
+  "font": "local Inter 200/400/500/600",
+  "palette": "supplied black/violet/amber tokens",
+  "spacing": "supplied six-pixel scale",
+  "motion": "source canvas hero and scroll journey",
+  "scope": "V2 source copy with exact prompt substitutions"
+}
