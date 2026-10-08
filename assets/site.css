@@ -10,7 +10,8 @@
 /* Homepage now opens with copy; particle storytelling begins in the transformation section. */
 .home-page .hero-grid--text{grid-template-columns:minmax(0,1fr)}
 .hero-grid--text .hero-copy{max-width:58rem}
-/* How we work: four steps on a track that draws in on reveal; vertical below 64rem. */
+.home-page .hero-grid--text .hero-copy{max-width:58rem}
+/* How we work: six stages, 3×2 on desktop with a track that draws in per row; vertical below 64rem. */
 .how-steps{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:var(--space-xl);position:relative}
 .how-steps:before,.how-steps:after{content:'';position:absolute;top:.5rem;left:0;right:0;height:1px;background:linear-gradient(90deg,var(--color-rule) 80%,transparent)}
 .how-steps:after{background:linear-gradient(90deg,var(--color-accent),var(--color-lilac) 60%,transparent);transform-origin:left}
@@ -20,13 +21,13 @@
 .how-step:before{content:'';position:absolute;top:0;left:0;z-index:1;width:1rem;height:1rem;border:1px solid var(--color-accent);border-radius:50%;background:var(--color-accent);box-shadow:0 0 0 6px var(--color-paper)}
 .has-motion .how-step:before{background:var(--color-paper);border-color:var(--color-lilac);transition:background .4s var(--ease-out),border-color .4s var(--ease-out)}
 .has-motion .how-steps.visible .how-step:before{background:var(--color-accent);border-color:var(--color-accent)}
-.how-step:nth-child(1):before{transition-delay:.2s}.how-step:nth-child(2):before{transition-delay:.55s}.how-step:nth-child(3):before{transition-delay:.9s}.how-step:nth-child(4):before{transition-delay:1.25s}
+.how-step:nth-child(1):before{transition-delay:.2s}.how-step:nth-child(2):before{transition-delay:.45s}.how-step:nth-child(3):before{transition-delay:.7s}.how-step:nth-child(4):before{transition-delay:.95s}.how-step:nth-child(5):before{transition-delay:1.2s}.how-step:nth-child(6):before{transition-delay:1.45s}
 .how-num{color:var(--color-amber);font-size:var(--text-small);font-weight:400;font-variant-numeric:tabular-nums}
 .how-step h3{margin-top:var(--space-sm)}
 .how-step>p{font-size:1rem;color:var(--color-muted);margin-block:var(--space-md) var(--space-lg)}
 .how-step>.how-outcome{margin:auto 0 0;padding-top:var(--space-md);border-top:1px solid var(--color-rule);color:var(--color-ink)}
 .how-outcome span{display:block;margin-bottom:var(--space-xs);font-size:var(--text-small);color:var(--color-quiet)}
-.how-we-work .muted-heading{color:var(--color-quiet)}
+.how-we-work .muted-heading,.control-model .muted-heading{color:var(--color-quiet)}
 .how-note{margin-top:var(--space-2xl);color:var(--color-quiet);font-size:var(--text-label)}
 .how-note:before{content:'';display:inline-block;width:1.5rem;height:1px;margin-right:var(--space-sm);vertical-align:middle;background:var(--color-amber)}
 @media(max-width:63.99rem){.how-steps{grid-template-columns:minmax(0,1fr);gap:var(--space-2xl)}
@@ -67,3 +68,10 @@
 .talk-detail a:hover{color:var(--color-amber)}
 @media(max-width:63.99rem){.talk-grid{grid-template-columns:minmax(0,1fr);gap:var(--space-2xl)}.talk-aside{padding-top:0}}
 @media(max-width:47.99rem){.talk-row{grid-template-columns:minmax(0,1fr);gap:var(--space-xs)}.talk-row>label{padding-top:0}.talk-submit>span{display:none}}
+@media(min-width:64rem){.how-steps{grid-template-columns:repeat(3,minmax(0,1fr));row-gap:var(--space-3xl)}
+.how-steps:before,.how-steps:after{display:none}
+.how-step:after{content:'';position:absolute;top:.5rem;left:0;right:calc(-1 * var(--space-xl));height:1px;background:linear-gradient(90deg,var(--color-accent),var(--color-lilac));transform-origin:left}
+.how-step:nth-child(3n):after{right:0;background:linear-gradient(90deg,var(--color-lilac),transparent)}
+.has-motion .how-step:after{transform:scaleX(0);transition:transform .25s linear}
+.has-motion .how-steps.visible .how-step:after{transform:none}
+.how-step:nth-child(1):after{transition-delay:.2s}.how-step:nth-child(2):after{transition-delay:.45s}.how-step:nth-child(3):after{transition-delay:.7s}.how-step:nth-child(4):after{transition-delay:.95s}.how-step:nth-child(5):after{transition-delay:1.2s}.how-step:nth-child(6):after{transition-delay:1.45s}}
