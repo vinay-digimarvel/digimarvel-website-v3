@@ -7,8 +7,8 @@ The marketing site for [digimarvel.ai](https://www.digimarvel.ai). It has six st
 ## Recent changes — 8 Oct 2026
 
 - **Positioning.** Copy follows the Positioning Foundation (8 Oct 2026). DigiMarvel is a Business Transformation & Intelligent Systems Studio that turns important processes into connected, agent-enabled workflows. The business platform (often Odoo) is the system of record, and AI agents are the system of action. The working product name Muse AI is deliberately kept off the public site until it is approved.
-- **Homepage sequence.** Hero (**"Your ERP should not just record your business. It should help run it."**) → particle story in three steps: operational problem → **"One place. Every answer."** (system of record, Odoo) → **"Clean data in. Approved action out."** (system of action) → **"The agent does the work."** Staying in control (permissions, approval, exceptions, audit trail) is now the fourth scene of the particle story, where the light bulb becomes the agent, a soft rounded figure holding a glowing orb. It is not named on the page → How we work, where the agent comes apart into a faint sky of stars that pours into the six stages in order: each dot lights as its stars arrive and the line to the next stage draws on with the scroll (`how-stars.js`) → first offer (**"Start with one workflow."**). The story is built with `data-story.css` and `data-story.js`.
-- **How we work.** Six stages (Discover, Establish, Stabilize, Enable, Prove, Evolve), shown 3×2 on desktop on a track that draws in on scroll. Each stage ends with an outcome.
+- **Homepage sequence.** Hero (**"Your ERP should not just record your business. It should help run it."**) → particle story in three steps: operational problem → **"One place. Every answer."** (system of record, Odoo) → **"Clean data in. Approved action out."** (system of action) → **"The agent does the work."** Staying in control (permissions, approval, exceptions, audit trail) is now the fourth scene of the particle story, where the light bulb becomes the agent, a soft rounded figure holding a glowing orb. It is not named on the page → How we work, which continues the same particle story: a path of six growing stops for the intro, then one shape per stage (Discover: a magnifying glass over a workflow map; Establish: a stacked database; Stabilize: a gyroscope; Enable: the agent again; Prove: bars above a baseline; Evolve: a sprout). The agent's orb moves through every shape as its focal point, and a stage rail under the drawing fills as the stages flow into one another → first offer (**"Start with one workflow."**). The story is built with `data-story.css` and `data-story.js`.
+- **How we work.** Six stages (Discover, Establish, Stabilize, Enable, Prove, Evolve), each a scene in the particle story with its own shape and an outcome, and a stage rail that links to each one.
 - **Calls to action.** The hero, the homepage close and the Company page close say **"Discuss a workflow"**. The nav button still says "Talk to us", the name of the contact page.
 - **Talk to us.** The contact page is now one focused form with the contact details alongside it. Messages are sent through Resend by `api/contact.php` (see `docs/deployment.md` for setup). Every nav and call-to-action button that said "Discuss a project" now says "Talk to us".
 - **Odoo page.** It has its own link in the main nav and footer. The separate Workflow Modernization block on the homepage was removed.
@@ -31,7 +31,7 @@ python3 .claude/serve.py 8083
 
 | File | Page | Notes |
 | --- | --- | --- |
-| `index.html` | Home | Text hero over a star field, four-step particle story (problem → system of record → system of action → the agent, with Staying in control), the six-stage How we work process and the first-offer close |
+| `index.html` | Home | Text hero over a star field, particle story (problem → system of record → system of action → the agent, with Staying in control → How we work in six stages), and the first-offer close |
 | `about.html` | Company | Mission and operating principles |
 | `contact.html` | Talk to us | Labelled form (name, organization, email, interest, subject, message). Interest options must match `TOPICS` in `api/contact.php` beside the contact details. It posts to `api/contact.php`, which sends the message through Resend. Nothing is stored on the server |
 | `odoo.html` | Workflow modernization (Odoo) | Text hero, workflow explorer, FAQ, downloadable project brief and a scroll-driven particle layer. The main nav and footer link to it as "Workflow modernization". Home links to it from the hero and the particle story |
@@ -55,9 +55,8 @@ python3 .claude/serve.py 8083
 │   ├── site.js            Mobile menu, scroll-reveal, copyright year (every page)
 │   ├── constellation.js   Old hero ring animation. No page loads it
 │   ├── data-story.css     Homepage narrative layout using the existing tokens
-│   ├── data-story.js      Scroll-linked records / Odoo / bulb / agent particle shapes
+│   ├── data-story.js      Scroll-linked particle shapes: records, Odoo, bulb, agent and the six How we work stages
 │   ├── hero-stars.js      Homepage hero star field that hands its particles to the story
-│   ├── how-stars.js       Takes the agent from the story and pours its stars into the How we work stages
 │   ├── journey.js         Scroll-driven particle layer (Odoo only)
 │   ├── odoo.js            Workflow tabs and project-brief dialog (Odoo only)
 │   ├── inter-*.ttf        Self-hosted Inter, weights 200/400/500/600 (OFL.txt is the license)

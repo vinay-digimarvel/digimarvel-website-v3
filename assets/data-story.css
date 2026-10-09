@@ -69,12 +69,34 @@
 .story-rules h3{font-size:1.125rem}
 .data-story-step .story-rules p{grid-column:2;margin-top:var(--space-xs);font-size:1rem}
 .data-story-step.story-control .how-note{margin-top:var(--space-lg);color:var(--color-quiet);font-size:var(--text-label)}
-/* How we work: the agent's stars pour into the stages. Each dot lights as its stars arrive; the lines follow the scroll. */
-.story-particles{position:fixed;inset:0;width:100%;height:100%;z-index:1;pointer-events:none}
-.data-story.is-handed-off .data-story-drawing canvas{opacity:0}
-.has-motion .how-steps.is-scrubbed .how-step:before{background:var(--color-paper);border-color:var(--color-lilac);transition:background .3s var(--ease-out),border-color .3s var(--ease-out),box-shadow .8s var(--ease-out);transition-delay:0s}
-.has-motion .how-steps.is-scrubbed .how-step.is-lit:before{background:var(--color-accent);border-color:var(--color-accent);box-shadow:0 0 0 6px var(--color-paper),0 0 1rem .35rem color-mix(in oklch,var(--color-accent) 55%,transparent)}
-.has-motion .how-steps.is-scrubbed:after{transform:scaleY(var(--track,0));transition:none}
-@media(min-width:64rem){.has-motion .how-steps.is-scrubbed .how-step:after{transform:scaleX(var(--line,0));transition:none}}
-@media print{.story-particles{display:none}}
-.how-we-work .section-heading,.how-step h3,.how-step>p,.story-control .how-note{text-shadow:0 0 1rem var(--color-paper),0 0 .3rem var(--color-paper)}
+/* How we work, as scenes five to eleven: the intro, then one stage per screen with its own shape beside it. */
+.how-intro .muted-heading{color:var(--color-quiet)}
+.how-flow{list-style:none;margin:0;padding:0}
+.how-stage h3{font-size:clamp(2.35rem,4.3vw,4.2rem);max-width:14ch}
+.how-stage .eyebrow{color:var(--color-quiet)}
+.data-story-step .how-outcome{color:var(--color-ink);border-top:1px solid var(--color-rule);padding-top:var(--space-md);margin-top:var(--space-xl);font-size:1rem}
+.data-story-step.how-stage .how-note{margin-top:var(--space-xl);color:var(--color-quiet);font-size:var(--text-label)}
+/* The stage rail: six stops under the drawing that fill in as the stages flow into one another. */
+.how-rail{list-style:none;margin:0;padding:0;display:flex;justify-content:center;gap:var(--space-md);position:relative;font-size:var(--text-small);opacity:0;visibility:hidden;transition:opacity .4s var(--ease-out),visibility 0s .4s}
+.data-story.show-rail .how-rail{opacity:1;visibility:visible;transition:opacity .4s var(--ease-out)}
+.how-rail:before,.how-rail:after{content:'';position:absolute;left:0;right:0;top:50%;height:1px;background:var(--color-rule);z-index:-1}
+.how-rail:after{background:linear-gradient(90deg,var(--color-accent),var(--color-lilac));transform:scaleX(var(--how,0));transform-origin:left}
+.how-rail a{display:inline-flex;align-items:center;gap:var(--space-xs);min-height:2.75rem;padding-inline:.6rem;border:1px solid var(--color-rule);border-radius:var(--radius-button);background:var(--color-paper);color:var(--color-quiet);text-decoration:none}
+.how-rail a:hover{color:var(--color-ink);border-color:var(--color-muted)}
+.how-rail a[aria-current]{color:var(--color-ink);border-color:var(--color-accent)}
+.how-rail .how-num{color:inherit}
+.how-rail a[aria-current] .how-num{color:var(--color-amber)}
+.how-rail-name{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
+.how-rail a[aria-current] .how-rail-name{position:static;width:auto;height:auto;overflow:visible;clip-path:none}
+@media(min-width:48rem){
+ .data-story-scenes{pointer-events:none}
+ .data-story-step{pointer-events:auto}
+ .how-stage{min-height:90svh}
+ .how-rail{position:absolute;bottom:5svh;left:calc(var(--story-x,.7)*100%);transform:translateX(-50%);z-index:2}
+ .data-story-step h3{text-shadow:0 0 1rem var(--color-paper),0 0 .3rem var(--color-paper)}
+}
+@media(max-width:47.99rem){
+ .how-rail{gap:.3rem;margin-top:var(--space-xs)}
+ .how-rail a{padding-inline:.45rem;min-height:2.25rem}
+}
+@media print{.how-rail{display:none}}
