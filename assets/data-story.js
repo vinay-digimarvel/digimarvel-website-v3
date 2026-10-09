@@ -121,6 +121,12 @@
   }
 
   const SX=new Float32Array(N),SY=new Float32Array(N),SR=new Float32Array(N),SA=new Float32Array(N),buckets=new Uint8Array(N);
+  // The last frame drawn, in canvas pixels, so the How we work layer can pick the agent up exactly where it stands.
+  const drawn={SX,SY,SR,SA,buckets,glow:{x:0,y:0,R:0,a:0}},drawListeners=[];
+  function glowAt(c,x,y,R,a){
+    const g=c.createRadialGradient(x,y,0,x,y,R);g.addColorStop(0,colors[0]);g.addColorStop(1,'transparent');
+    c.globalAlpha=a;c.fillStyle=g;c.fillRect(x-R,y-R,R*2,R*2);c.globalAlpha=1;
+  }
   let w=0,h=0,progress=0,goal=0,raf=0,last=0,visible=false,active=-1,centres=[];
   function measure(){centres=scenes.map(el=>{const r=el.getBoundingClientRect();return scrollY+r.top+r.height*.5;});}
   function position(){
@@ -143,11 +149,10 @@
     // The bulb turns slowly as it forms; the agent turns back to face you.
     const angle=progress>2?-.22*(3-progress):progress>1?(progress-1)*-.22:0,ca=Math.cos(angle),sa=Math.sin(angle),box=canvas.getBoundingClientRect();
     // A soft light behind the orb as the agent takes shape.
-    const glow=clamp((progress-2.3)/.7)*.45;
+    const glow=clamp((progress-2.3)/.7)*.45;drawn.glow.a=glow;
     if(glow>.01){
       const Z=-ORB[0]*sa+ORB[2]*ca,P=3/(3-Z),gx=cx+(ORB[0]*ca+ORB[2]*sa)*scale*P,gy=cy+ORB[1]*scale*P,R=scale*.55;
-      const g=ctx.createRadialGradient(gx,gy,0,gx,gy,R);g.addColorStop(0,colors[0]);g.addColorStop(1,'transparent');
-      ctx.globalAlpha=glow;ctx.fillStyle=g;ctx.fillRect(gx-R,gy-R,R*2,R*2);ctx.globalAlpha=1;
+      Object.assign(drawn.glow,{x:gx,y:gy,R});glowAt(ctx,gx,gy,R,glow);
     }
     for(let i=0;i<N;i++){
       const p=particles[i],a=p[keys[phase]],b=p[keys[phase+1]];
@@ -183,6 +188,7 @@
     if(scatterAlpha>.01)clumps.forEach(k=>{if(k[3])label(k[3],cx+k[0]*scale,cy+(k[1]-k[2]*1.15)*scale,small,scatterAlpha);});
     ctx.globalAlpha=1;
     updateText(Math.round(progress));
+    drawListeners.forEach(f=>f());
   }
   function frame(now){
     raf=0;if(!visible||document.hidden){last=0;return;}
@@ -199,7 +205,7 @@
     const dpr=Math.min(devicePixelRatio||1,2);canvas.width=Math.round(w*dpr);canvas.height=Math.round(h*dpr);ctx.setTransform(dpr,0,0,dpr,0,0);
     measure();progress=reduced.matches?Math.round(position()):position();draw();wake();
   }
-  window.DMStory={particles,colors,star,place,lensAt,stepLens,onPointer:f=>listeners.push(f)};   // shared with the hero
+  window.DMStory={particles,colors,star,place,lensAt,stepLens,onPointer:f=>listeners.push(f),drawn,glowAt,onDraw:f=>drawListeners.push(f)};   // shared with the hero and How we work
   listeners.push(wake);
   reduced.addEventListener('change',wake);
   addEventListener('scroll',wake,{passive:true});addEventListener('resize',resize);

@@ -69,3 +69,12 @@
 .story-rules h3{font-size:1.125rem}
 .data-story-step .story-rules p{grid-column:2;margin-top:var(--space-xs);font-size:1rem}
 .data-story-step.story-control .how-note{margin-top:var(--space-lg);color:var(--color-quiet);font-size:var(--text-label)}
+/* How we work: the agent's stars pour into the stages. Each dot lights as its stars arrive; the lines follow the scroll. */
+.story-particles{position:fixed;inset:0;width:100%;height:100%;z-index:1;pointer-events:none}
+.data-story.is-handed-off .data-story-drawing canvas{opacity:0}
+.has-motion .how-steps.is-scrubbed .how-step:before{background:var(--color-paper);border-color:var(--color-lilac);transition:background .3s var(--ease-out),border-color .3s var(--ease-out),box-shadow .8s var(--ease-out);transition-delay:0s}
+.has-motion .how-steps.is-scrubbed .how-step.is-lit:before{background:var(--color-accent);border-color:var(--color-accent);box-shadow:0 0 0 6px var(--color-paper),0 0 1rem .35rem color-mix(in oklch,var(--color-accent) 55%,transparent)}
+.has-motion .how-steps.is-scrubbed:after{transform:scaleY(var(--track,0));transition:none}
+@media(min-width:64rem){.has-motion .how-steps.is-scrubbed .how-step:after{transform:scaleX(var(--line,0));transition:none}}
+@media print{.story-particles{display:none}}
+.how-we-work .section-heading,.how-step h3,.how-step>p,.story-control .how-note{text-shadow:0 0 1rem var(--color-paper),0 0 .3rem var(--color-paper)}
