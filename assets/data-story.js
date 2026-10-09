@@ -81,6 +81,104 @@
     p.muse=m;p.tint=tint;
   });
 
+  // How we work: one shape per stage. The agent's orb is the thread through all of them, moving to each shape's focal
+  // point, so the story reads as one continuous build. Each shape has its own random stream.
+  const KEYS=['scatter','connected','bulb','muse','path','discover','establish','stabilize','enable','prove','evolve'];
+  const rng=s=>()=>{s=(Math.imul(s,1664525)+1013904223)>>>0;return s/4294967296;};
+  const tilt=(q,a)=>{const c=Math.cos(a),s=Math.sin(a);return[q[0],q[1]*c-q[2]*s,q[1]*s+q[2]*c];};
+  const add=(a,b,k=1)=>[a[0]+b[0]*k,a[1]+b[1]*k,a[2]+b[2]*k];
+  const along=(a,b,t)=>[lerp(a[0],b[0],t),lerp(a[1],b[1],t),lerp(a[2],b[2],t)];
+  const pick=(weights,g)=>{const total=weights.reduce((s,x)=>s+x,0);let acc=0;for(let k=0;k<weights.length;k++){acc+=weights[k]/total;if(g<acc)return[k,(g-(acc-weights[k]/total))/(weights[k]/total)];}return[weights.length-1,1];};
+  const STAGE_TILT=-.45;
+  // Orb centre and radius in each scene from the agent onwards.
+  const ORBS={muse:[ORB,.19],path:[[-.5,.72,.3],.08],discover:[[.02,-.17,.05],.075],establish:[tilt([0,-.66,0],STAGE_TILT),.13],
+    stabilize:[[0,-.08,0],.14],enable:[ORB,.19],prove:[[.68,-.68,.1],.1],evolve:[[.02,-.52,0],.13]};
+  const shapes={
+    // The journey: an S-shaped path climbing away from you, with six stops that grow as it goes.
+    path(g,r){
+      const C=s=>[lerp(-.5,.5,s)+.3*Math.sin(s*TAU),lerp(.72,-.72,s),lerp(.3,-.3,s)];
+      if(g<.5){
+        const s=r(),a=C(Math.max(0,s-.01)),b=C(Math.min(1,s+.01)),dx=b[0]-a[0],dy=b[1]-a[1],d=Math.hypot(dx,dy)||1,q=C(s);
+        if(g<.4){const side=r()<.5?-1:1;return[[q[0]-dy/d*.075*side+(r()-.5)*.012,q[1]+dx/d*.075*side+(r()-.5)*.012,q[2]],1];}
+        return[[q[0],q[1],q[2]],(s*24|0)%2?1:4];
+      }
+      const R=[.06,.085,.11,.135,.16,.185],[k]=pick(R,(g-.5)/.5),q=C(k/5),a=r()*TAU,ring=r()<.8,rad=R[k]*(ring?1:Math.sqrt(r()));
+      return[[q[0]+Math.cos(a)*rad,q[1]+Math.sin(a)*rad,q[2]+.02],k===5?3:ring?4:0];
+    },
+    // Discover: a magnifying glass over a small workflow map, one stop of it flagged as the exception.
+    discover(g,r){
+      const Lc=[-.1,-.15,0],R=.42;
+      if(g<.45){const t=r()*TAU,u=r()*TAU,rr=R+Math.cos(u)*.03;return[[Lc[0]+Math.cos(t)*rr,Lc[1]+Math.sin(t)*rr,Math.sin(u)*.03],r()<.3?4:1];}
+      if(g<.68){const t=r(),u=r()*TAU,dir=[Math.SQRT1_2,Math.SQRT1_2],a=[Lc[0]+dir[0]*(R+.02),Lc[1]+dir[1]*(R+.02)],len=.5,rad=.055;
+        return[[a[0]+dir[0]*len*t-dir[1]*Math.cos(u)*rad,a[1]+dir[1]*len*t+dir[0]*Math.cos(u)*rad,Math.sin(u)*rad],0];}
+      const map=[[-.33,-.3],[-.1,-.4],[.02,-.17],[-.24,.05],[.13,.06]];
+      if(g<.85){const k=[0,1,3,4][(r()*4)|0],a=r()*TAU,rad=.045*(r()<.7?1:Math.sqrt(r()));return[[map[k][0]+Math.cos(a)*rad,map[k][1]+Math.sin(a)*rad,.03],k===3?3:2];}
+      const k=(r()*4)|0,t=(Math.floor(r()*7)+.15+r()*.5)/7;   // dashed links between the stops
+      return[along([...map[k],.03],[...map[k+1],.03],t),1];
+    },
+    // Establish: the system of record as a stacked database, tilted so its top shows.
+    establish(g,r){
+      const R=.44,top=y=>-.44+y*.34,H=.22;let q,c;
+      const around=()=>{let a=r()*TAU;if(Math.sin(a)<0&&r()<.6)a=-a;return a;};
+      if(g<.3){const j=(r()*3)|0,a=around(),y=top(j)+r()*H;q=[Math.cos(a)*R,y,Math.sin(a)*R];c=r()<.2?0:1;}
+      else if(g<.82){const j=(r()*6)|0,a=r()*TAU,y=top(j>>1)+(j&1)*H+(r()-.5)*.012;q=[Math.cos(a)*R,y,Math.sin(a)*R];c=j&1?1:4;}
+      else{const a=r()*TAU,rad=R*Math.sqrt(r());q=[Math.cos(a)*rad,top(0),Math.sin(a)*rad];c=r()<.6?2:0;}
+      return[tilt(q,STAGE_TILT),c];
+    },
+    // Stabilize: a gyroscope, three rings turning about one steady centre, on a small stand.
+    stabilize(g,r){
+      const Gc=[0,-.08,0];
+      const ring=(n,R)=>{const l=Math.hypot(...n);n=n.map(v=>v/l);const a=Math.abs(n[1])<.9?[0,1,0]:[1,0,0];
+        let u=[n[1]*a[2]-n[2]*a[1],n[2]*a[0]-n[0]*a[2],n[0]*a[1]-n[1]*a[0]];const lu=Math.hypot(...u);u=u.map(v=>v/lu);
+        const v=[n[1]*u[2]-n[2]*u[1],n[2]*u[0]-n[0]*u[2],n[0]*u[1]-n[1]*u[0]],t=r()*TAU,j=()=>(r()-.5)*.02;
+        return[Gc[0]+(Math.cos(t)*u[0]+Math.sin(t)*v[0])*R+j(),Gc[1]+(Math.cos(t)*u[1]+Math.sin(t)*v[1])*R+j(),Gc[2]+(Math.cos(t)*u[2]+Math.sin(t)*v[2])*R+j()];};
+      if(g<.3)return[ring([.3,0,.95],.52),1];
+      if(g<.56)return[ring([.95,.1,.3],.46),2];
+      if(g<.78)return[ring([0,.95,.3],.4),0];
+      if(g<.86)return[[(r()-.5)*.012,lerp(-.7,.56,r()),(r()-.5)*.012],4];
+      const a=r()*TAU,rad=.22*(r()<.6?1:Math.sqrt(r()));return[tilt([Math.cos(a)*rad,.64,Math.sin(a)*rad],STAGE_TILT),1];
+    },
+    // Prove: bars rising above the baseline the work started from, and a trend line climbing to the orb.
+    prove(g,r){
+      const base=.62,X=[-.5,-.17,.16,.49],Hs=[.38,.58,.8,1.08],W=.11;
+      if(g<.66){
+        const [k]=pick(Hs,g/.66),x0=X[k],top=base-Hs[k],face=r();let q,c=1;
+        if(face<.35){const e=r();q=e<.5?[x0+(r()<.5?-W:W),lerp(top,base,r()),W]:[x0+lerp(-W,W,r()),r()<.5?top:base,W];c=0;}   // front edges
+        else if(face<.6)q=[x0+lerp(-W,W,r()),lerp(top,base,r()),W];
+        else if(face<.8)q=[x0+(r()<.5?-W:W),lerp(top,base,r()),lerp(-W,W,r())];
+        else{q=[x0+lerp(-W,W,r()),top,lerp(-W,W,r())];c=4;}
+        return[q,c];
+      }
+      if(g<.76){const t=(Math.floor(r()*18)+r()*.5)/18;return[[lerp(-.72,.76,t),base-.3,.2],3];}   // dashed baseline
+      if(g<.84)return[[lerp(-.72,.76,r()),base,.2],4];
+      const pts=X.map((x,k)=>[x,base-Hs[k]-.1,.1]).concat([ORBS.prove[0]]),t=r()*4,k=Math.min(3,t|0);
+      return[along(pts[k],pts[k+1],t-k),2];
+    },
+    // Evolve: a sprout from a mound of soil, the orb its first bud.
+    evolve(g,r){
+      if(g<.14){const a=r()*TAU,rad=.45*Math.sqrt(r());return[[Math.cos(a)*rad,.68-.12*(1-(rad/.45)**2),Math.sin(a)*rad*.5],r()<.6?3:1];}
+      const stem=t=>{const u=1-t,P=[[0,.6,0],[-.12,.15,0],[.02,-.42,0]];return[0,1,2].map(d=>u*u*P[0][d]+2*u*t*P[1][d]+t*t*P[2][d]);};
+      if(g<.3){const t=r(),q=stem(t),a=r()*TAU;return[[q[0]+Math.cos(a)*.022,q[1],Math.sin(a)*.022],2];}
+      const leaf=(t,dir,L,W)=>{const B=stem(t),l=Math.hypot(...dir),d=[dir[0]/l,dir[1]/l],u=r(),edge=r()<.4,v=edge?(r()<.5?-1:1):r()<.25?0:r()*2-1,wd=W*Math.sin(Math.PI*u)**.8;
+        return[[B[0]+d[0]*L*u-d[1]*v*wd,B[1]+d[1]*L*u+d[0]*v*wd,.08*v*v],edge||v===0?(r()<.6?4:1):2];};
+      if(g<.62)return leaf(.45,[-.82,-.57],.5,.16);
+      if(g<.88)return leaf(.62,[.85,-.52],.42,.14);
+      return leaf(.85,[-.6,-.8],.2,.07);
+    }
+  };
+  particles.forEach(p=>{p.tints=KEYS.map(()=>p.color);p.tints[3]=p.tint;p.enable=p.muse;p.tints[8]=p.tint;});
+  KEYS.forEach((key,s)=>{
+    if(!shapes[key])return;
+    const r=rng(52711+s*7919),[oc,or]=ORBS[key];
+    particles.forEach((p,i)=>{
+      const f=i/N;
+      if(f<.19){p[key]=add(oc,add(p.muse,ORB,-1),or/.19);p.tints[s]=p.tint;return;}   // the orb, carried whole from scene to scene
+      const [q,c]=shapes[key]((f-.19)/.81,r);p[key]=q;p.tints[s]=c;
+    });
+  });
+  // How far each scene is turned, and how bright the light behind the orb is.
+  const YAW=[0,0,-.22,0,.3,0,.35,-.3,0,-.3,.2],GLOW=[0,0,0,.45,.3,.4,.4,.45,.45,.4,.45];
+
   // The DigiMarvel mark as a small outline: four points, with the centre diamond once a star is large enough to show it.
   const STAR=[0,1,2,3,4,5,6,7].map(k=>{const a=k*Math.PI/4-Math.PI/2,r=k%2?.36:1;return[Math.cos(a)*r,Math.sin(a)*r];});
   function star(c,x,y,r,a){
@@ -121,8 +219,6 @@
   }
 
   const SX=new Float32Array(N),SY=new Float32Array(N),SR=new Float32Array(N),SA=new Float32Array(N),buckets=new Uint8Array(N);
-  // The last frame drawn, in canvas pixels, so the How we work layer can pick the agent up exactly where it stands.
-  const drawn={SX,SY,SR,SA,buckets,glow:{x:0,y:0,R:0,a:0}},drawListeners=[];
   function glowAt(c,x,y,R,a){
     const g=c.createRadialGradient(x,y,0,x,y,R);g.addColorStop(0,colors[0]);g.addColorStop(1,'transparent');
     c.globalAlpha=a;c.fillStyle=g;c.fillRect(x-R,y-R,R*2,R*2);c.globalAlpha=1;
@@ -138,21 +234,32 @@
     return i+smooth(clamp(((mid-centres[i])/(centres[i+1]-centres[i])-.14)/.72));
   }
   function updateText(stage){if(stage===active)return;active=stage;root.dataset.stage=String(stage);}
+  // The stage rail under the drawing: shown from How we work on, filling as the stages flow into one another.
+  const rail=root.querySelector('.how-rail'),railLinks=rail?[...rail.querySelectorAll('a')]:[],FIRST=KEYS.indexOf('discover');
+  let railShown=null,railCurrent=null,railFill=null;
+  function updateRail(){
+    if(!rail)return;
+    const shown=progress>FIRST-1.5,current=progress<FIRST-.5?-1:clamp(Math.round(progress-FIRST),0,railLinks.length-1),fill=clamp((progress-FIRST)/(railLinks.length-1)).toFixed(3);
+    if(shown!==railShown){railShown=shown;root.classList.toggle('show-rail',shown);}
+    if(current!==railCurrent){railCurrent=current;railLinks.forEach((a,k)=>{if(k===current)a.setAttribute('aria-current','step');else a.removeAttribute('aria-current');});}
+    if(fill!==railFill){railFill=fill;rail.style.setProperty('--how',fill);}
+  }
   function label(text,x,y,size,alpha){
     ctx.globalAlpha=alpha;ctx.font=`400 ${size}px Inter, sans-serif`;ctx.shadowColor=paper;ctx.shadowBlur=10;ctx.fillStyle=colors[4];ctx.fillText(text,x,y);ctx.shadowBlur=0;
   }
   function draw(){
     ctx.clearRect(0,0,w,h);
-    const keys=['scatter','connected','bulb','muse'],phase=Math.min(keys.length-2,Math.floor(progress)),blend=progress-phase;
+    const keys=KEYS,phase=Math.min(keys.length-2,Math.floor(progress)),blend=progress-phase;
     const shift=smooth(clamp(progress)),{cx,cy,scale}=geometry(w,h,shift),sz=sizeK();
     root.style.setProperty('--story-x',(cx/w).toFixed(4));
-    // The bulb turns slowly as it forms; the agent turns back to face you.
-    const angle=progress>2?-.22*(3-progress):progress>1?(progress-1)*-.22:0,ca=Math.cos(angle),sa=Math.sin(angle),box=canvas.getBoundingClientRect();
-    // A soft light behind the orb as the agent takes shape.
-    const glow=clamp((progress-2.3)/.7)*.45;drawn.glow.a=glow;
+    // Each scene has its own turn: the bulb turns slowly as it forms, the agent faces you, the stages each sit at an angle.
+    const angle=lerp(YAW[phase],YAW[phase+1],blend),ca=Math.cos(angle),sa=Math.sin(angle),box=canvas.getBoundingClientRect();
+    // A soft light behind the orb, which carries it from the agent through every stage.
+    const glow=phase<2?0:phase===2?clamp((progress-2.3)/.7)*.45:lerp(GLOW[phase],GLOW[phase+1],smooth(blend));
     if(glow>.01){
-      const Z=-ORB[0]*sa+ORB[2]*ca,P=3/(3-Z),gx=cx+(ORB[0]*ca+ORB[2]*sa)*scale*P,gy=cy+ORB[1]*scale*P,R=scale*.55;
-      Object.assign(drawn.glow,{x:gx,y:gy,R});glowAt(ctx,gx,gy,R,glow);
+      const A=ORBS[keys[Math.max(3,phase)]],B=ORBS[keys[Math.max(3,phase+1)]],k=phase<3?1:smooth(blend);
+      const o=along(A[0],B[0],k),or=lerp(A[1],B[1],k),Z=-o[0]*sa+o[2]*ca,P=3/(3-Z);
+      glowAt(ctx,cx+(o[0]*ca+o[2]*sa)*scale*P,cy+o[1]*scale*P,scale*(.24+or*1.65),glow);
     }
     for(let i=0;i<N;i++){
       const p=particles[i],a=p[keys[phase]],b=p[keys[phase+1]];
@@ -164,8 +271,11 @@
       let alpha=lerp(.25+depth*.45,.45+depth*.5,Math.min(1,progress));
       // Amber glass, lilac neck, teal base keep the established V3 accent palette.
       let color=p.color;
-      if(progress>1.65)color=y<-.1?3:y<.4?(i%3===0?4:1):i%2===0?2:0;
-      if(phase===2&&t>.5)color=p.tint;   // each star takes the agent's colours as it arrives
+      if(phase>2)color=p.tints[t>.5?phase+1:phase];   // each star takes the next shape's colours as it arrives
+      else{
+        if(progress>1.65)color=y<-.1?3:y<.4?(i%3===0?4:1):i%2===0?2:0;
+        if(phase===2&&t>.5)color=p.tint;
+      }
       const l=lensAt(box.left+sx,box.top+sy);
       if(l.f>0){sx+=l.px;sy+=l.py;r*=1+l.f*2.6;alpha+=(1-alpha)*l.f;if(l.f>.4)color=4;}
       SX[i]=sx;SY[i]=sy;SR[i]=r;SA[i]=p.spin+progress*.8;
@@ -188,7 +298,7 @@
     if(scatterAlpha>.01)clumps.forEach(k=>{if(k[3])label(k[3],cx+k[0]*scale,cy+(k[1]-k[2]*1.15)*scale,small,scatterAlpha);});
     ctx.globalAlpha=1;
     updateText(Math.round(progress));
-    drawListeners.forEach(f=>f());
+    updateRail();
   }
   function frame(now){
     raf=0;if(!visible||document.hidden){last=0;return;}
@@ -205,7 +315,7 @@
     const dpr=Math.min(devicePixelRatio||1,2);canvas.width=Math.round(w*dpr);canvas.height=Math.round(h*dpr);ctx.setTransform(dpr,0,0,dpr,0,0);
     measure();progress=reduced.matches?Math.round(position()):position();draw();wake();
   }
-  window.DMStory={particles,colors,star,place,lensAt,stepLens,onPointer:f=>listeners.push(f),drawn,glowAt,onDraw:f=>drawListeners.push(f)};   // shared with the hero and How we work
+  window.DMStory={particles,colors,star,place,lensAt,stepLens,onPointer:f=>listeners.push(f)};   // shared with the hero
   listeners.push(wake);
   reduced.addEventListener('change',wake);
   addEventListener('scroll',wake,{passive:true});addEventListener('resize',resize);
