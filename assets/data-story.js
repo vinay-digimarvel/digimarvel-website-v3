@@ -128,7 +128,7 @@
     ctx.textAlign='center';ctx.textBaseline='middle';
     const small=mobile.matches?10:13,hubAlpha=clamp(1-Math.abs(progress-1)*2.5);
     if(hubAlpha>.01){
-      label('Odoo',cx,cy,mobile.matches?21:30,hubAlpha);
+      label('One record',cx,cy,mobile.matches?21:30,hubAlpha);
       nodes.forEach((n,i)=>label(labels[i],cx+n[0]*scale,cy+(n[1]+(n[1]<0?-.24:.24))*scale,small,hubAlpha));
     }
     const scatterAlpha=clamp(1-progress*3);
