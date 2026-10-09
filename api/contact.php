@@ -16,7 +16,7 @@
 declare(strict_types=1);
 
 const TOPICS = [
-    'Workflow modernization (Odoo)',
+    'Workflow modernization',
     'Agent-enabled workflows',
     'Business foundations',
     'A software project',
