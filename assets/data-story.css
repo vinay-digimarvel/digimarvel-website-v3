@@ -60,3 +60,12 @@
 }
 /* Hero subheading: brighter and one step heavier so it holds its own against the headline and the sky. */
 .home-page .hero-intro{color:oklch(83% 0 0);font-weight:400}
+/* Scene four: the agent, with the four rules that keep people in control as a compact ruled list beside it. */
+.story-control h2{max-width:16ch}
+.story-control .muted-heading{color:var(--color-quiet)}
+.story-rules{list-style:none;margin:var(--space-xl) 0 0;padding:0}
+.story-rules li{display:grid;grid-template-columns:2.25rem minmax(0,1fr);column-gap:var(--space-sm);align-items:baseline;border-top:1px solid var(--color-rule);padding-block:var(--space-md)}
+.story-rules span{color:var(--color-amber);font-size:var(--text-small);font-weight:400;font-variant-numeric:tabular-nums}
+.story-rules h3{font-size:1.125rem}
+.data-story-step .story-rules p{grid-column:2;margin-top:var(--space-xs);font-size:1rem}
+.data-story-step.story-control .how-note{margin-top:var(--space-lg);color:var(--color-quiet);font-size:var(--text-label)}
