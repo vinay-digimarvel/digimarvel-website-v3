@@ -45,15 +45,15 @@
 
   // The agent: a soft, rounded figure cradling a glowing orb. The bulb's glass condenses into the orb.
   // It draws on its own random stream so every earlier scene, and the hero, stays exactly as it was.
-  let museSeed=40221;
-  const mrand=()=>{museSeed=(Math.imul(museSeed,1664525)+1013904223)>>>0;return museSeed/4294967296;};
+  let agentSeed=40221;
+  const mrand=()=>{agentSeed=(Math.imul(agentSeed,1664525)+1013904223)>>>0;return agentSeed/4294967296;};
   const ball=(r,c=[0,0,0])=>{const z=mrand()*2-1,a=mrand()*TAU,s=Math.sqrt(1-z*z)*r;return[c[0]+Math.cos(a)*s,c[1]+z*r,c[2]+Math.sin(a)*s];};
   // A domed head flowing into a slightly fuller belly and a flattened base, with a clear oval face window.
   const bodyR=y=>y<-.5?.43*Math.sqrt(Math.max(0,1-((y+.5)/.42)**2)):y<.3?lerp(.43,.5,smooth((y+.5)/.8)):.5*Math.sqrt(Math.max(0,1-((y-.3)/.44)**4));
   const skin=(x,y)=>Math.sqrt(Math.max(0,bodyR(y)**2-x*x));
   const inFace=(x,y)=>(x/.29)**2+((y+.44)/.21)**2<1;
   const ORB=[0,.16,.56];
-  function museBody(){
+  function agentBody(){
     for(;;){
       const y=lerp(-.92,.74,mrand()),r=bodyR(y);if(mrand()*.5>r)continue;   // even density over the surface
       let a=mrand()*TAU;if(Math.sin(a)<0&&mrand()<.4)a=-a;                  // favour the side facing us
@@ -66,7 +66,7 @@
     if(f<.15){const inner=mrand()<.3,q=ball(inner?.19*Math.cbrt(mrand()):.19,ORB),k=mrand();m=q;tint=k<.25?4:k<.7?0:2;}
     else if(f<.19){const t=mrand()*TAU,R=.25,lx=Math.cos(t)*R,lz=Math.sin(t)*R,y=-lz*Math.sin(.35),z=lz*Math.cos(.35),c=Math.cos(-.3),s=Math.sin(-.3);
       m=[ORB[0]+lx*c-y*s,ORB[1]+lx*s+y*c,ORB[2]+z];tint=3;}
-    else if(f<.71||f>=.95){m=museBody();const k=mrand();tint=k<.17?0:k<.24?4:1;}
+    else if(f<.71||f>=.95){m=agentBody();const k=mrand();tint=k<.17?0:k<.24?4:1;}
     else if(f<.76){const t=mrand()*TAU,g=1+(mrand()-.5)*.06,x=Math.cos(t)*.29*g,y=-.44+Math.sin(t)*.21*g;m=[x,y,skin(x,y)+.01];tint=4;}
     else if(f<.85){
       // Arms sweep from the shoulders, bend at the elbow and close round the orb; the last third are the hands.
@@ -78,12 +78,12 @@
     else if(f<.92){const a=mrand()*TAU,r=.032*Math.sqrt(mrand()),x=side*.115+Math.cos(a)*r,y=-.47+Math.sin(a)*r*1.25;m=[x,y,skin(x,y)+.015];tint=4;}
     else if(f<.935){const t=lerp(.2,.8,mrand())*Math.PI,x=Math.cos(t)*.065,y=-.395+Math.sin(t)*.04;m=[x,y,skin(x,y)+.015];tint=4;}
     else{const a=mrand()*TAU,r=.04*Math.sqrt(mrand()),x=side*.19+Math.cos(a)*r,y=-.39+Math.sin(a)*r*.7;m=[x,y,skin(x,y)+.01];tint=3;}
-    p.muse=m;p.tint=tint;
+    p.agent=m;p.tint=tint;
   });
 
   // How we work: one shape per stage. The agent's orb is the thread through all of them, moving to each shape's focal
   // point, so the story reads as one continuous build. Each shape has its own random stream.
-  const KEYS=['scatter','connected','bulb','muse','path','discover','establish','stabilize','enable','prove','evolve'];
+  const KEYS=['scatter','connected','bulb','agent','path','discover','establish','stabilize','enable','prove','evolve'];
   const rng=s=>()=>{s=(Math.imul(s,1664525)+1013904223)>>>0;return s/4294967296;};
   const tilt=(q,a)=>{const c=Math.cos(a),s=Math.sin(a);return[q[0],q[1]*c-q[2]*s,q[1]*s+q[2]*c];};
   const add=(a,b,k=1)=>[a[0]+b[0]*k,a[1]+b[1]*k,a[2]+b[2]*k];
@@ -91,7 +91,7 @@
   const pick=(weights,g)=>{const total=weights.reduce((s,x)=>s+x,0);let acc=0;for(let k=0;k<weights.length;k++){acc+=weights[k]/total;if(g<acc)return[k,(g-(acc-weights[k]/total))/(weights[k]/total)];}return[weights.length-1,1];};
   const STAGE_TILT=-.45;
   // Orb centre and radius in each scene from the agent onwards.
-  const ORBS={muse:[ORB,.19],path:[[-.5,.72,.3],.08],discover:[[.02,-.17,.05],.075],establish:[tilt([0,-.66,0],STAGE_TILT),.13],
+  const ORBS={agent:[ORB,.19],path:[[-.5,.72,.3],.08],discover:[[.02,-.17,.05],.075],establish:[tilt([0,-.66,0],STAGE_TILT),.13],
     stabilize:[[0,-.08,0],.14],enable:[ORB,.19],prove:[[.68,-.68,.1],.1],evolve:[[.02,-.52,0],.13]};
   const shapes={
     // The journey: an S-shaped path climbing away from you, with six stops that grow as it goes.
@@ -166,27 +166,20 @@
       return leaf(.85,[-.6,-.8],.2,.07);
     }
   };
-  particles.forEach(p=>{p.tints=KEYS.map(()=>p.color);p.tints[3]=p.tint;p.enable=p.muse;p.tints[8]=p.tint;});
+  particles.forEach(p=>{p.tints=KEYS.map(()=>p.color);p.tints[3]=p.tint;p.enable=p.agent;p.tints[8]=p.tint;});
   KEYS.forEach((key,s)=>{
     if(!shapes[key])return;
     const r=rng(52711+s*7919),[oc,or]=ORBS[key];
     particles.forEach((p,i)=>{
       const f=i/N;
-      if(f<.19){p[key]=add(oc,add(p.muse,ORB,-1),or/.19);p.tints[s]=p.tint;return;}   // the orb, carried whole from scene to scene
+      if(f<.19){p[key]=add(oc,add(p.agent,ORB,-1),or/.19);p.tints[s]=p.tint;return;}   // the orb, carried whole from scene to scene
       const [q,c]=shapes[key]((f-.19)/.81,r);p[key]=q;p.tints[s]=c;
     });
   });
   // How far each scene is turned, and how bright the light behind the orb is.
   const YAW=[0,0,-.22,0,.3,0,.35,-.3,0,-.3,.2],GLOW=[0,0,0,.45,.3,.4,.4,.45,.45,.4,.45];
 
-  // The DigiMarvel mark as a small outline: four points, with the centre diamond once a star is large enough to show it.
-  const STAR=[0,1,2,3,4,5,6,7].map(k=>{const a=k*Math.PI/4-Math.PI/2,r=k%2?.36:1;return[Math.cos(a)*r,Math.sin(a)*r];});
-  function star(c,x,y,r,a){
-    const cs=Math.cos(a)*r,sn=Math.sin(a)*r;
-    for(let k=0;k<8;k++){const u=STAR[k][0],v=STAR[k][1],px=x+u*cs-v*sn,py=y+u*sn+v*cs;if(k)c.lineTo(px,py);else c.moveTo(px,py);}
-    c.closePath();
-    if(r>5){const q=.28;c.moveTo(x+cs*q,y+sn*q);c.lineTo(x-sn*q,y+cs*q);c.lineTo(x-cs*q,y-sn*q);c.lineTo(x+sn*q,y-cs*q);c.closePath();}
-  }
+  const {star}=window.DMStars;   // the shared star particle
 
   // Pointer lens: stars near the cursor swell, brighten and part a little, like a loupe over the data.
   const lens={x:0,y:0,gx:0,gy:0,on:0,aim:0,R:150,t:0,seen:false},L={f:0,px:0,py:0},listeners=[];
@@ -219,10 +212,7 @@
   }
 
   const SX=new Float32Array(N),SY=new Float32Array(N),SR=new Float32Array(N),SA=new Float32Array(N),buckets=new Uint8Array(N);
-  function glowAt(c,x,y,R,a){
-    const g=c.createRadialGradient(x,y,0,x,y,R);g.addColorStop(0,colors[0]);g.addColorStop(1,'transparent');
-    c.globalAlpha=a;c.fillStyle=g;c.fillRect(x-R,y-R,R*2,R*2);c.globalAlpha=1;
-  }
+  const {glowAt}=window.DMStars;
   let w=0,h=0,progress=0,goal=0,raf=0,last=0,visible=false,active=-1,centres=[];
   function measure(){centres=scenes.map(el=>{const r=el.getBoundingClientRect();return scrollY+r.top+r.height*.5;});}
   function position(){
