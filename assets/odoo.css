@@ -141,7 +141,8 @@ body.odoo-page.has-dialog{overflow-y:hidden}
 @media(min-width:48rem){.odoo-page .hero{padding-block:var(--space-3xl) var(--space-4xl)}}
 @media(min-width:64rem){
 .odoo-page .hero{padding-top:var(--space-4xl)}
-.odoo-page .hero-copy{display:grid;grid-template-columns:minmax(0,1.6fr) minmax(0,1fr);gap:var(--space-3xl);align-items:center}
+.odoo-page .hero-copy{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:var(--space-xl) var(--space-3xl);align-items:center}
+.odoo-page .hero-heading{grid-column:1/-1}
 .odoo-page .hero h1{font-size:clamp(3rem,4.8vw,4.4rem)}
 .odoo-page .hero-line{white-space:nowrap}
 .odoo-page .hero-body{margin-top:0}
@@ -169,3 +170,18 @@ body.odoo-page.has-dialog{overflow-y:hidden}
 .odoo-page .faq-group-label{margin-bottom:var(--space-xl)}
 .odoo-page .faq-item+.faq-item{margin-top:var(--space-xl)}
 }
+
+/* Star drawings, shared with the homepage: the hero's connected system, a shape per workflow, and the orb at the close. */
+.odoo-page .odoo-hero-art,.odoo-page .workflow-art,.odoo-page .closing-art{margin:0;position:relative}
+.odoo-page .odoo-hero-art canvas,.odoo-page .workflow-art canvas,.odoo-page .closing-art canvas{display:block;width:100%;height:100%}
+.odoo-page .odoo-hero-art{height:20rem;margin-top:var(--space-xl)}
+.odoo-page .workflow-art{height:13rem;margin-top:var(--space-md)}
+.odoo-page .closing-art{display:none}
+@media(min-width:48rem){.odoo-page .workflow-art{height:19rem;margin-top:var(--space-xl)}}
+@media(min-width:64rem){
+ .odoo-page .closing-block{display:grid;grid-template-columns:minmax(0,1fr) 16rem;gap:var(--space-2xl);align-items:center}
+ .odoo-page .closing-art{display:block;height:16rem}
+ .odoo-page .odoo-hero-art{margin-top:0;height:24rem}
+}
+@media(max-width:47.99rem){.odoo-page .odoo-hero-art{height:16rem}}
+@media print{.odoo-page .odoo-hero-art,.odoo-page .workflow-art,.odoo-page .closing-art{display:none}}
